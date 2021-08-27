@@ -2,8 +2,8 @@ function createBars() {
     let barArr = []
     let barContainer = document.querySelector(".barContainer")
 
-    for (let i = 1; i <= 100; i++) {
-        let barWidth = Math.floor(Math.random() * 1500) + 10
+    for (let i = 1; i <= 50; i++) {
+        let barWidth = Math.floor(Math.random() * 1000) + 10
         barArr.push(barWidth)
 
         let bar = document.createElement("div")
@@ -22,21 +22,24 @@ function deleteBars() {
     })
 }
 
+async function swapElements(barOne, barTwo) {
+    const a = parseInt(barTwo.getAttribute("value"))
+    const b = parseInt(barOne.getAttribute("value"))
+
+    barOne.setAttribute("value", a)
+    barTwo.setAttribute("value", b)
+
+    barOne.style.width = `${a}px`
+    barTwo.style.width = `${b}px`
+    await new Promise(resolve => setTimeout(resolve, delay))
+}
+
 async function bubbleSort(barsArray) {
     for (let i = 0; i < barsArray.length - 1; i++) {
         for (let j = 0; j < barsArray.length - 1 - i; j++) {
-            console.log(barsArray[j])
-
 
             if (parseInt(barsArray[j].getAttribute("value")) > parseInt(barsArray[j + 1].getAttribute("value"))) {
-                const a = parseInt(barsArray[j + 1].getAttribute("value"))
-                const b = parseInt(barsArray[j].getAttribute("value"))
-
-                barsArray[j].setAttribute("value", a)
-                barsArray[j + 1].setAttribute("value", b)
-
-                barsArray[j].style.width = `${a}px`
-                barsArray[j + 1].style.width = `${b}px`
+                swapElements(barsArray[j], barsArray[j + 1])
             }
 
             await new Promise(resolve => setTimeout(resolve, delay))
@@ -46,11 +49,38 @@ async function bubbleSort(barsArray) {
     return barsArray
 }
 
-let delay = .1
+async function selectionSort(barsArray) {
+    let baseIndex = 0
+
+    for (let i = 0; i < barsArray.length - 1; i++) {
+        baseIndex = i
+
+        for (let j = i + 1; j < barsArray.length; j++) {
+            if (parseInt(barsArray[j].getAttribute("value")) < parseInt(barsArray[baseIndex].getAttribute("value"))) {
+                baseIndex = j
+                await new Promise(resolve => setTimeout(resolve, delay))
+            }
+
+            if (baseIndex != j) {
+                await new Promise(resolve => setTimeout(resolve, delay))
+            }
+        }
+
+        if (baseIndex != i) {
+            await swapElements(barsArray[baseIndex], barsArray[i])
+        }
+    }
+}
+
+let delay = 25
+
+
 
 let newChartBtn = document.getElementById("newArr")
 
 let bubbleSortBtn = document.getElementById("bubbleSort")
+
+let selectionSortBtn = document.getElementById("selectionSort")
 
 newChartBtn.addEventListener("click", () => {
     deleteBars()
@@ -60,4 +90,9 @@ newChartBtn.addEventListener("click", () => {
 bubbleSortBtn.addEventListener("click", () => {
     let barsArray = document.querySelectorAll(".bars")
     bubbleSort(barsArray)
+})
+
+selectionSortBtn.addEventListener("click", () => {
+    let barsArray = document.querySelectorAll(".bars")
+    selectionSort(barsArray)
 })

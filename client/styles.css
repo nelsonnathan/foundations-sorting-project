@@ -20,15 +20,20 @@ body div {
     background-color: #a6b1e1;
     color: #424874;
     margin: 5px;
-    height: 4vh;
-    width: 12vw;
-    font-size: large;
+    height: 70px;
+    width: 150px;
+    font-size: medium;
     font-family: 'Press Start 2P', cursive;
+    text-align: center;
     border-radius: 15px;
 }
 
 .bars {
     background-color: #DCD6F7;
-    height: 6px;
+    height: 8px;
     margin: 3px;
+}
+
+.barContainer {
+    margin-bottom: 50px;
 }
